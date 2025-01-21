@@ -1,6 +1,6 @@
 {
     "name": "@malysus/node-red-contrib-better-sqlite",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A better sqlite node for Node-RED with pooling",
     "dependencies": {
         "better-sqlite-pool": "^0.3.2",
