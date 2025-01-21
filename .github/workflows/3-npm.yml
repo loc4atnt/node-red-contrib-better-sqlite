@@ -1,10 +1,11 @@
 #https://victorlillo.dev/blog/run-github-action-after-another-action-finished
+name: "Npm Publish"
 on:
   workflow_run:
-    workflows:  ["CodeQL"]
+    workflows: ["CodeQL"]
     types: [completed]
   workflow_dispatch:
-    
+
 jobs:
   publish:
     runs-on: ubuntu-latest
