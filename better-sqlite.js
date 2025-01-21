@@ -11,16 +11,25 @@ module.exports = function (RED) {
      */
     function all(query, pool, node, msg) {
         let method = "all";
+        const countStatement = query.trim().split(";").filter(n => n).length;
 
-        if (query.includes("INSERT") || query.includes("UPDATE") || query.includes("DELETE")) {
+        if (countStatement ===1 && (query.includes("INSERT ") || query.includes("UPDATE ") || query.includes("DELETE "))) {
             method = "run";
+        } else if (countStatement > 1) {
+            method = "exec";
         }
+        //node.log(method + " " + countStatement + " " + query );   
         poolManager.execOnPool(pool, function (db) {
             try {
                 //node.log(msg.topic);
-                const row = db.prepare(query)[method]()
-                //node.log(row);
-                msg.payload = row;
+                if (method === "exec") {
+                    db.exec(query);
+                    msg.payload == [];
+                } else {
+                    const row = db.prepare(query)[method]()
+                    //node.log(row);
+                    msg.payload = row;
+                }
                 node.send(msg);
             } catch (err) {
                 node.error(err, msg);
@@ -28,12 +37,12 @@ module.exports = function (RED) {
         });
     }
 
-/**
- * Retrieves or initializes the SQLite pool manager in the global context.
- * @param {object} globalContext - The context in which to store the pool manager.
- * @param {boolean} [reset=false] - Whether to reset the pool manager.
- * @returns {object} The pool manager from the global context.
- */
+    /**
+     * Retrieves or initializes the SQLite pool manager in the global context.
+     * @param {object} globalContext - The context in which to store the pool manager.
+     * @param {boolean} [reset=false] - Whether to reset the pool manager.
+     * @returns {object} The pool manager from the global context.
+     */
     function getPoolManager(globalContext, reset = false) {
         const CONTEXT_NAME = '_sqlitePool';
         if (!globalContext.get(CONTEXT_NAME || reset === true)) {
