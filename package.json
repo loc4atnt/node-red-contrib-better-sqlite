@@ -1,0 +1,28 @@
+{
+    "name": "@malysus/node-red-contrib-better-sqlite",
+    "version": "0.1.0",
+    "description": "A better sqlite node for Node-RED with pooling",
+    "dependencies": {
+        "better-sqlite-pool": "^0.3.2",
+        "better-sqlite3": "^11.8.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/malys/node-red-contrib-better-sqlite"
+    },
+    "keywords": [
+        "node-red",
+        "sqlite"
+    ],
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "node-red": {
+        "version": ">=1.0.0",
+        "nodes": {
+            "better-sqlite": "better-sqlite.js"
+        }
+    },
+    "author": "Malys",
+    "license": "Apache-2.0"
+}
