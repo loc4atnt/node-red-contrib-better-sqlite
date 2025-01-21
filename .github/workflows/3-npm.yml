@@ -1,0 +1,21 @@
+#https://victorlillo.dev/blog/run-github-action-after-another-action-finished
+on:
+  workflow_run:
+    workflows:  ["CodeQL"]
+    types: [completed]
+  workflow_dispatch:
+    
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - run: npm ci
+      - run: npm test
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
