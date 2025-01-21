@@ -88,20 +88,6 @@ jobs:
           body: ${{ steps.changelog.outputs.changes }}
           token: ${{ github.token }}
 
-      # Commit the changelog to the repository. We do it
-      # here to make sure that other actions were successfull.
-      # Also, [skip ci] is a Github Actions specific commit
-      # message, it will prevent the action from triggering
-      # another run, just in case. I won't go into the details
-      # why the action would not trigger anyway.
-      - name: Commit CHANGELOG.md
-        uses: stefanzweifel/git-auto-commit-action@v4
-        if: ${{ steps.semver.outputs.next != '' }}
-        with:
-          branch: main
-          commit_message: "release: changelog for ${{ steps.semver.outputs.next }} [skip ci]"
-          file_pattern: CHANGELOG.md
-
       # Some cosmetics, apply output using different variables
       # if the workflow was triggered manually.
       - name: Set deployed ref output
@@ -113,28 +99,26 @@ jobs:
               echo "name=${{ steps.semver.outputs.next }}" >> $GITHUB_OUTPUT
           fi
 
-      # A bonus, you can ignore that. I like to keep deployments
-      # in separate workflows, and to trigger them automatically
-      # when a release is created. We can dispatch another workflows
-      # thanks to the elevated permissions. By doing this manually
-      # you can call different workflows depending on the context,
-      # and do not worry about thinking which "on" event to use.
-      - name: Trigger production deployment
-        uses: actions/github-script@v6
-        if: ${{ steps.deployed-tag.outputs.name != '' }}
+      # Update npm version
+      - name: 'change version'
+        uses: reedyuk/npm-version@1.1.1
+        if: ${{ steps.semver.outputs.next != '' }}
         with:
-          result-encoding: string
-          script: |
-            github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'deploy-to-fly.yml',
-              ref: 'main',
-              inputs: {
-                config: 'production',
-                ref: '${{ steps.deployed-tag.outputs.name }}'
-              }
-            });
+          version: '${{ steps.semver.outputs.next }}'
+
+      # Commit the changelog to the repository. We do it
+      # here to make sure that other actions were successfull.
+      # Also, [skip ci] is a Github Actions specific commit
+      # message, it will prevent the action from triggering
+      # another run, just in case. I won't go into the details
+      # why the action would not trigger anyway.
+      - name: Commit package.json/Changelog
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: ${{ steps.semver.outputs.next != '' }}
+        with:
+          branch: master
+          commit_message: "release: changelog for ${{ steps.semver.outputs.next }} [skip ci]"
+          file_pattern: CHANGELOG.md package.json
 
       # At the end, I want to have some debug information in the job summary.
       - name: Add action summary
