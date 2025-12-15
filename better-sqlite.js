@@ -12,8 +12,16 @@ module.exports = function (RED) {
     function all(query, pool, node, msg) {
         let method = "all";
         const countStatement = query.trim().split(";").filter(n => n).length;
+        const upperQuery = query.toUpperCase();
 
-        if (countStatement ===1 && (query.includes("INSERT ") || query.includes("UPDATE ") || query.includes("DELETE "))) {
+        if (countStatement === 1 && (
+            upperQuery.includes("INSERT ") || 
+            upperQuery.includes("UPDATE ") || 
+            upperQuery.includes("DELETE ") ||
+            upperQuery.includes("CREATE ") ||
+            upperQuery.includes("DROP ") ||
+            upperQuery.includes("ALTER ")
+        )) {
             method = "run";
         } else if (countStatement > 1) {
             method = "exec";
@@ -24,7 +32,7 @@ module.exports = function (RED) {
                 //node.log(msg.topic);
                 if (method === "exec") {
                     db.exec(query);
-                    msg.payload == [];
+                    msg.payload = [];
                 } else {
                     const row = db.prepare(query)[method]()
                     //node.log(row);

@@ -1,6 +1,10 @@
 node-red-contrib-better-sqlite
 ====================
 
+**@loc4atnt: I made a change to fix bug and upgrade better-sqlite3 version**
+
+---------
+
 A Node-Red node to read and write a local sqlite database using [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) and [better-sqlite-pool](https://github.com/WiseLibs/better-sqlite-pool).
 This package must improve performance and stability (avoid thread locking) over the standard sqlite3 module.
 

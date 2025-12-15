@@ -1,14 +1,14 @@
 {
-    "name": "@malysus/node-red-contrib-better-sqlite",
-    "version": "0.1.1",
+    "name": "@loc4atnt/node-red-contrib-better-sqlite",
+    "version": "0.1.2",
     "description": "A better sqlite node for Node-RED with pooling",
     "dependencies": {
         "better-sqlite-pool": "^0.3.2",
-        "better-sqlite3": "^11.8.1"
+        "better-sqlite3": "^12.5.0"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/malys/node-red-contrib-better-sqlite"
+        "url": "https://github.com/loc4atnt/node-red-contrib-better-sqlite"
     },
     "keywords": [
         "node-red",
@@ -23,6 +23,6 @@
             "better-sqlite": "better-sqlite.js"
         }
     },
-    "author": "Malys",
+    "author": "loc4atnt",
     "license": "Apache-2.0"
 }
