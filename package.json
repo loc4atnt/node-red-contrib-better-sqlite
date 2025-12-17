@@ -1,6 +1,6 @@
 {
     "name": "@loc4atnt/node-red-contrib-better-sqlite",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "A better sqlite node for Node-RED with pooling",
     "dependencies": {
         "better-sqlite-pool": "^0.3.2",

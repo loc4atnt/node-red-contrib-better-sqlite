@@ -14,13 +14,21 @@ module.exports = function (RED) {
         const countStatement = query.trim().split(";").filter(n => n).length;
         const upperQuery = query.toUpperCase();
 
+        // Use word boundaries to avoid false positives like "LAST_UPDATE" matching "UPDATE"
+        const updateRegex = /\bUPDATE\s+/i;
+        const insertRegex = /\bINSERT\s+/i;
+        const deleteRegex = /\bDELETE\s+/i;
+        const createRegex = /\bCREATE\s+/i;
+        const dropRegex = /\bDROP\s+/i;
+        const alterRegex = /\bALTER\s+/i;
+
         if (countStatement === 1 && (
-            upperQuery.includes("INSERT ") || 
-            upperQuery.includes("UPDATE ") || 
-            upperQuery.includes("DELETE ") ||
-            upperQuery.includes("CREATE ") ||
-            upperQuery.includes("DROP ") ||
-            upperQuery.includes("ALTER ")
+            insertRegex.test(query) || 
+            updateRegex.test(query) || 
+            deleteRegex.test(query) ||
+            createRegex.test(query) ||
+            dropRegex.test(query) ||
+            alterRegex.test(query)
         )) {
             method = "run";
         } else if (countStatement > 1) {

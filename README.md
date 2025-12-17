@@ -1,7 +1,8 @@
 node-red-contrib-better-sqlite
 ====================
 
-**@loc4atnt: I made a change to fix bug and upgrade better-sqlite3 version**
+## @loc4atnt: I made a change to fix bug and upgrade better-sqlite3 version
+- use regex for query operation detecting instead of string.includes
 
 ---------
 
